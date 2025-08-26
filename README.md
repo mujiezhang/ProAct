@@ -3,21 +3,24 @@
 </div>
 
 # ProAct: **Pro**virus **Act**ivity Detector ✨
-根据宿主测序原始数据评估其中原噬菌体的活跃度。
+Assessing the activity of provirus based on the host's raw sequencing data.
 
-## 💠 目录
-
-- [ProAct检测原理](#-ProAct检测原理)
-- [ProAct工作流程](#-ProAct工作流程)
-- [依赖环境](#-依赖环境)
-- [安装与环境准备](#-安装与环境准备)
-- [使用说明](#-使用说明)
-  - [输入参数](#-输入参数)
-  - [命令示例](#-命令示例)
-  - [输出文件](#-输出文件)
-- [测试数据](#-测试数据)
+## Table of contents
+<!-- TOC -->
+- [ProAct: Provirus Activity Detector](#proact-provirus-activity-detector-)
+- [Introduction](#introduction)
+  - [Principle](#-principle)
+  - [Workflow of ProAct](#-workflow-of-proact)
+- [Instructions](#instructions)
+  - [Dependencies](#-dependencies)
+  - [**Installation**](#-installation)
+  - [**How to run**](#-how-to-run)
+  - [**Output files**](#-output-files)
 - [Citation](#-citation)
 - [Contact](#-contact)
+
+<!-- /TOC -->
+
 
 ---
 
@@ -28,7 +31,7 @@ Using whole-genome sequencing (WGS) data, ProAct exploits the principle that a p
 
 <img width="803" height="197" alt="schematic" src="https://github.com/user-attachments/assets/05ddcefd-5bdb-4298-8e27-0fe7ee55f065" />
 
-## 💠 Workflow of ProBord
+## 💠 Workflow of ProAct
 ProAct requires the input of the host reference genome, its original sequencing data, and the start/end site of the prophage. It proceeds by (1) aligning the quality-controlled and filtered raw reads to the reference genome to generate coverage depth data; (2) calculating the average coverage for each marker gene region, taking the median value to represent the host coverage, and calculating the average coverage of the prophage region to represent the phage coverage; (3) computing PtoH to obtain the activity level of the prophage within the host (represented by PtoH).
 
 Note: We used the identify module of GTDB-Tk to identify marker genes. To avoid downloading the entire GTDB-Tk database when packaging the ProAct workflow, we employed the `extract_gtdb_mg.py` script from `https://github.com/4less/extract_gtdb_mg` with minor modifications to adapt it to ProAct's requirements. This script was adapted from GTDB-Tk, and its identification results are consistent with those of GTDB-Tk.
@@ -131,7 +134,7 @@ test-data
 python ProAct/proact_pipeline.py -g test-data/GCA_904129595.1_S.Tm_LT2p22_assembled_genomic.fna -1 test-data/ERR4552622_R1.fastq -2 test-data/ERR4552622_R2.fastq -p test-data/phage_info.tsv -t 40 -o test-result
 ```
 
-## Output files
+## 💠 Output files
 In this example, the results of ProBord's analysis will be written to the `test-result` directory, which will look like this:
 ```
 test-result/
