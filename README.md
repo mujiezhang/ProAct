@@ -7,67 +7,69 @@
 
 ## 💠 目录
 
-- [ProAct检测原理](#ProAct检测原理)
-- [ProAct工作流程](#ProAct工作流程)
-- [依赖环境](#依赖环境)
-- [安装与环境准备](#安装与环境准备)
-- [使用说明](#使用说明)
-  - [输入参数](#输入参数)
-  - [命令示例](#命令示例)
-  - [输出文件](#输出文件)
-- [测试数据](#测试数据)
+- [ProAct检测原理](#-ProAct检测原理)
+- [ProAct工作流程](#-ProAct工作流程)
+- [依赖环境](#-依赖环境)
+- [安装与环境准备](#-安装与环境准备)
+- [使用说明](#-使用说明)
+  - [输入参数](#-输入参数)
+  - [命令示例](#-命令示例)
+  - [输出文件](#-输出文件)
+- [测试数据](#-测试数据)
 - [Citation](#-citation)
 - [Contact](#-contact)
 
 ---
 
-## 💠 ProAct检测原理
+# Introduction
+
+## 💠 Principle
 Using whole-genome sequencing (WGS) data, ProAct exploits the principle that a provirus in lysogeny shares the same copy number as its host, resulting in a Provirus-to-Host coverage ratio (PtoH) of 1, whereas transition toward lysis drives self-replication and elevates PtoH above 1.
 
 <img width="803" height="197" alt="schematic" src="https://github.com/user-attachments/assets/05ddcefd-5bdb-4298-8e27-0fe7ee55f065" />
 
-## 💠 ProAct工作流程
+## 💠 Workflow of ProBord
 `ProAct` 需要输入宿主参考基因组及其原始测序数据、原噬菌体起始位点，通过（1）质控过滤后的原始读段和参考基因组进行比对，生成覆盖深度数据；（2）分别计算每个marker gene区域的平均coverage，取中位值代表宿主coverage；计算原噬菌体区域的平均coverage代表噬菌体coverage；（3）计算PtoH，得到该宿主内原噬菌体的活跃度（通过PtoH表征）。
 
 <img width="787" height="199" alt="workflow" src="https://github.com/user-attachments/assets/6c22bc29-d1eb-40cd-ad99-8127762a3adf" />
 
+# Instructions
 
-## 💠 依赖环境
-
-  - python 3
-  - bbmap
-  - bwa
-  - samtools
-  - hmmer
-  - prodigal
-  - pandas
-  - biopython
-  - pysam
-
-## 💠 安装与环境准备
-
-你可以使用 `conda install` 命令逐个安装所有依赖：
-
-```bash
-# 创建并激活一个新环境
-conda create -n ProAct bash python=3.8 -y
-conda activate ProAct
-
-# 安装脚本所需工具
-conda install -c conda-forge -c bioconda bbmap bwa samtools gtdbtk -y
-
-# 安装 Python 库
-conda install pandas biopython pysam -y
+## 💠 Dependencies
+```
+python3
+bbmap
+bwa
+samtools
+hmmer
+prodigal
+pandas
+biopython
+pysam
 ```
 
-## 💠 使用说明
-
-### ▶️ 输入参数
+## 💠 Installation
+- Install miniconda and add channels (If already installed, please skip)
 ```
-usage: proact_pipeline.py [-h] -g GENOME -1 READ1 -2 READ2 -p PHAGE_INFO [-o OUTPUT_DIR] [-t THREADS]
+wget -c https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+source ~/.bashrc
+conda config --add channels bioconda
+conda config --add channels conda-forge
+```
+- Install dependencies
+``` 
+conda create -n proact python3 bbmap bwa samtools hmmer prodigal 
+conda activate probord
+pip install pandas biopython pysam
+```
+
+## 💠 How to run
+
+- ▶️ Command line options
+```
+usage: python proact_pipeline.py [-h] -g GENOME -1 READ1 -2 READ2 -p PHAGE_INFO [-o OUTPUT_DIR] [-t THREADS]
                           [-m] [--keep-tmp]
-
-ProAct Pipeline - Phage activity analysis
 
 options:
   -h, --help            show this help message and exit
