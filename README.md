@@ -1,13 +1,14 @@
-<img width="396" height="366" alt="logo" src="https://github.com/user-attachments/assets/ffe1315d-9e5c-48cd-a712-a3765102a4b5" />
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/ffe1315d-9e5c-48cd-a712-a3765102a4b5" alt="ProBord" width="450" />
+</div>
 
-## ProAct:Provirus Activity Detector🦸
+# ProAct: **Pro**virus **Act**ivity Detector ✨
 根据宿主测序原始数据评估其中原噬菌体的活跃度。
 
 ## 💠 目录
 
 - [ProAct检测原理](#ProAct检测原理)
 - [ProAct工作流程](#ProAct工作流程)
-- [目录结构](#目录结构)
 - [依赖环境](#依赖环境)
 - [安装与环境准备](#安装与环境准备)
 - [使用说明](#使用说明)
@@ -15,8 +16,8 @@
   - [命令示例](#命令示例)
   - [输出文件](#输出文件)
 - [测试数据](#测试数据)
-- [引用](#引用)
-- [贡献与反馈](#贡献与反馈)
+- [Citation](#-citation)
+- [Contact](#-contact)
 
 ---
 
@@ -30,33 +31,18 @@ Using whole-genome sequencing (WGS) data, ProAct exploits the principle that a p
 
 <img width="787" height="199" alt="workflow" src="https://github.com/user-attachments/assets/6c22bc29-d1eb-40cd-ad99-8127762a3adf" />
 
-## 💠 目录结构
-
-```plain
-ProAct/
-├── 1_form_depth.sh          # 质控过滤后的原始读段和参考基因组进行比对，生成 .depth 文件
-├── 2_form_MG.sh             # GTDB-Tk 注释 marker genes
-├── 3.get_MG_phage_counts.py # 计算每个 marker gene区域的平均coverage，取中位值代表宿主coverage；计算原噬菌体区域的平均coverage代表噬菌体coverage
-├── 4.calculate_PtoH.py      # 计算 PtoH 指标
-├── run_pipeline.sh         # 串联以上四步的脚本
-├── test/                    # 测试数据目录
-│   ├── GCA_904129595.1_S.Tm_LT2p22_assembled_genomic.fna #宿主基因组
-│   ├── ERR4552622_R1.fastq #宿主测序 R1 数据
-│   └── ERR4552622_R2.fastq #宿主测序 R2 数据
-└── README.md               # 本文档
-```
 
 ## 💠 依赖环境
 
-- **操作系统**: Linux / macOS
-- **语言与工具**:
-  - Bash >=4.0
-  - Python 3.8+
-  - [Conda](https://docs.conda.io/)
-  - [BBMap](https://jgi.doe.gov/data-and-tools/bbtools/)
-  - BWA, Samtools
-  - GTDB-Tk 2.x
-  - Python 库: `pandas`, `biopython`, `pysam`
+  - python 3
+  - bbmap
+  - bwa
+  - samtools
+  - hmmer
+  - prodigal
+  - pandas
+  - biopython
+  - pysam
 
 ## 💠 安装与环境准备
 
@@ -77,75 +63,51 @@ conda install pandas biopython pysam -y
 ## 💠 使用说明
 
 ### ▶️ 输入参数
+```
+usage: proact_pipeline.py [-h] -g GENOME -1 READ1 -2 READ2 -p PHAGE_INFO [-o OUTPUT_DIR] [-t THREADS]
+                          [-m] [--keep-tmp]
 
-| 参数   | 说明                         | 示例                            |
-| ---- | -------------------------- | ----------------------------- |
-| `-g` | 宿主基因组 FASTA 文件             | `genome.fna`                  |
-| `-1` | 测序数据 R1 FASTQ              | `reads_R1.fastq`              |
-| `-2` | 测序数据 R2 FASTQ              | `reads_R2.fastq`              |
-| `-r` | 噬菌体区段：`contig,起始-终止`，可多次指定 | `-r CP024621.1,292609-333351` |
-| `-o` | 输出目录                       | `results/`                    |
-| `-t` | 比对线程数，默认 8                 | `-t 16`                       |
-| `-c` | GTDB-Tk CPU 数，默认 4         | `-c 8`                        |
-| `-e` | Conda 环境名，可选               | `-e ProAct`             |
+ProAct Pipeline - Phage activity analysis
 
-💡 **Note 1:** 
-  （1）测序数据需要为双端测序；
-  （2）宿主基因组必须包含噬菌体所在的contig区域
-  
-### ▶️ 命令示例
+options:
+  -h, --help            show this help message and exit
+  -g, --genome GENOME   Host genome FASTA file
+  -1, --read1 READ1     Read1 FASTQ file
+  -2, --read2 READ2     Read2 FASTQ file
+  -p, --phage-info PHAGE_INFO
+                        A tab-delimited file with columns: virla_name, host_contig, start, end
+  -o, --output-dir OUTPUT_DIR
+                        Output directory (default: proact_results)
+  -t, --threads THREADS
+                        Number of threads (default: 40)
+  -m, --meta            Run prodigal in meta mode (for metagenomes)
+  --keep-tmp            Keep temporary files
 
-```bash
-bash run_pipeline.sh -g genome.fna -1 reads_R1.fastq -2 reads_R2.fastq -r contig1,1-5000 -r contig2,10000-20000 -o results/ -t 16 -c 8
+Examples:
+  # Basic usage
+  python proact_pipeline.py -g host_genome.fna -1 sample_R1.fastq -2 sample_R2.fastq -p phage_info.tsv
+
+  # Specify output dir, threads and meta mode
+  python proact_pipeline.py  -g genome.fna  -1 reads_R1.fq  -2 reads_R2.fq -p phage_regions.tsv -o results_sample1 -t 40 -m --keep-tmp
+
+Outputs:
+  marker_genes.tsv              - GTDB marker genes list
+  marker_gene_counts.tsv        - depth stats for marker genes
+  phage_counts.tsv              - depth stats for phage regions
+  host_counts.tsv               - median depth of marker genes
+  PtoH_results.tsv              - final prediction results
 ```
 
-### ▶️ 输出文件
-
-运行完成后，`results/` 下会包含：
-
-```
-results/
-├── sample.depth
-├── sample_phage_info.txt
-├── MG/
-│   ├── genome.tsv
-│   ├── gtdbtk.json
-│   ├── gtdbtk.log
-│   ├── gtdbtk.warnings.log
-│   └──identify
-│      └──...
-├── counts/
-│   ├── marker_gene_counts.tsv
-│   ├── phage_counts.tsv
-│   └── host_counts.tsv
-└── PtoH.tsv
-```
-#### 🔹 输出结果说明
-- **`sample.depth`**：参考基因组上每个位点的测序深度（chromosome, position, depth）。
-- **`sample_phage_info.txt`**：根据用户输入信息汇总（sample, genome, contig, start-end, phage_id）。
-- **`MG/`**：GTDB-Tk 标注结果目录，包含：
-  - `genome.tsv`：marker gene 注释表
-  - `gtdbtk.json`：注释参数与版本信息
-  - `gtdbtk.log` / `gtdbtk.warnings.log`：运行日志与警告
-  - `identify/…`：HMM 比对与中间文件
-- **`counts/`**：深度统计结果目录，包含：
-  - `marker_gene_counts.tsv`：宿主基因组中每个 marker gene 的信息（Gene Id, Total_Counts, Per_Counts, Median_Depth, Region_Length）
-  - `phage_counts.tsv`：每个噬菌体的信息（Phage_Id, Chromosome, Start, Stop, Total_Counts, Per_Counts, Median_Depth, Region_Length）
-  - `host_counts.tsv`：宿主基因组中所有 marker gene 平均深度的中位值（Sample_ID, Median_of_MG）
-- **`PtoH.tsv`**：最终输出，将 `phage_counts.tsv`的`Per_Counts` 除以 `host_counts.tsv`的`Median_of_MG` 得到 PtoH 值，并附加质量标签（`high`/`low`）。如果phage_Per_Counts > 10 且 host_Median_of_MG > 10，则为'high'；否则为'low'；如果PtoH ≥ 1.5，则活性判定为"active"，若PtoH < 1.5，则活性判定为"inactive".
-
-💡 **Note 2:** 
-  如果phage_Per_Counts < 10 或 host_Median_of_MG < 10，则质量标签为'low'。表明测序深度不足，容易导致PtoH偏差较大。
 
 ## 💠 测试数据
 1.通过wget命令从zenodo下载测试数据（ERR4552622_R1.fastq, ERR4552622_R2.fastq,GCA_904129595.1_S.Tm_LT2p22_assembled_genomic.fna）
 ```bash
 # R1
-wget -c 'https://zenodo.org/records/16909693/files/ERR4552622_R1.fastq?download=1'
+wget -c https://zenodo.org/records/16909693/files/ERR4552622_R1.fastq
 # R2
-wget -c 'https://zenodo.org/records/16909693/files/ERR4552622_R2.fastq?download=1'
+wget -c https://zenodo.org/records/16909693/files/ERR4552622_R2.fastq
 # 参考基因组 .fna
-wget -c 'https://zenodo.org/records/16909693/files/GCA_904129595.1_S.Tm_LT2p22_assembled_genomic.fna?download=1'
+wget -c https://zenodo.org/records/16909693/files/GCA_904129595.1_S.Tm_LT2p22_assembled_genomic.fna
 ```
 2.激活ProAct环境，并运行run_pipeline.sh
 ```bash
@@ -160,11 +122,29 @@ bash run_pipeline.sh -g test/GCA_904129595.1_S.Tm_LT2p22_assembled_genomic.fna -
 
 3.2 PtoH.tsv文件为判定结果文件，内容如图所示：
 
+#### 🔹 输出结果说明
+- **`sample.depth`**：参考基因组上每个位点的测序深度（chromosome, position, depth）。
+- **`sample_phage_info.txt`**：根据用户输入信息汇总（sample, genome, contig, start-end, phage_id）。
+- **`MG/`**：GTDB-Tk 标注结果目录，包含：
+  - `genome.tsv`：marker gene 注释表
+  - `gtdbtk.json`：注释参数与版本信息
+  - `gtdbtk.log` / `gtdbtk.warnings.log`：运行日志与警告
+  - `identify/…`：HMM 比对与中间文件
+- **`counts/`**：深度统计结果目录，包含：
+  - `marker_gene_counts.tsv`：宿主基因组中每个 marker gene 的信息（Gene Id, Total_Counts, Per_Counts, Median_Depth, Region_Length）
+  - `phage_counts.tsv`：每个噬菌体的信息（Phage_Id, Chromosome, Start, Stop, Total_Counts, Per_Counts, Median_Depth, Region_Length）
+  - `host_counts.tsv`：宿主基因组中所有 marker gene 平均深度的中位值（Sample_ID, Median_of_MG）
+- **`PtoH.tsv`**：最终输出，将 `phage_counts.tsv`的`Per_Counts` 除以 `host_counts.tsv`的`Median_of_MG` 得到 PtoH 值，并附加质量标签（`high`/`low`）。如果phage_Per_Counts > 10 且 host_Median_of_MG > 10，则为'high'；否则为'low'；如果PtoH ≥ 1.5，则活性判定为"active"，若PtoH < 1.5，则活性判定为"inactive".
 
+  💡 **Note 2:** 
+  如果phage_Per_Counts < 10 或 host_Median_of_MG < 10，则质量标签为'low'。表明测序深度不足，容易导致PtoH偏差较大。
 
-## 💠 引用
-...
+# 💠 Citation
+......
 
-## 💠 贡献与反馈
-
-欢迎提出 issue 或 pull request，共同完善项目。
+# 📬 Contact
+```
+# Mujie Zhang
+# School of Life Sciences & Biotechnology, Shanghai Jiao Tong University
+# Email: zhangmujie@sjtu.edu.cn
+```
