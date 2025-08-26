@@ -64,7 +64,7 @@ conda config --add channels conda-forge
 ```
 - Install dependencies
 ``` 
-conda create -n proact python3 bbmap bwa samtools hmmer prodigal 
+conda create -n proact python bbmap bwa samtools hmmer prodigal 
 conda activate probord
 pip install pandas biopython pysam
 ```
