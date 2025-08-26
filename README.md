@@ -54,7 +54,7 @@ pysam
 ```
 
 ## 💠 Installation
-- Install miniconda and add channels (If already installed, please skip)
+- Install miniconda and add channels (**If already installed, please skip**)
 ```
 wget -c https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
@@ -127,7 +127,7 @@ test-data
 ├── GCA_904129595.1_S.Tm_LT2p22_assembled_genomic.fna
 └── phage_info.tsv
 ```
-**Note**: `ERR4552622_R1.fastq` and `ERR4552622_R2.fastq` are the raw reads; `GCA_904129595.1_S.Tm_LT2p22_assembled_genomic.fna` is the host genome; `phage_info.tsv` contains location information for `phage p22`, `phage Fels-1` and `phage Fels-2`. We get these information from paper `Turkington C J R, Abadi N N, Edwards R A, et al. hafeZ: active prophage identification through read mapping[J]. bioRxiv, 2021: 2021.07. 21.453177.`
+**Note**: The files `ERR4552622_R1.fastq` and `ERR4552622_R2.fastq` contain the raw sequencing reads; `GCA_904129595.1_S.Tm_LT2p22_assembled_genomic.fna` corresponds to the host genome; and `phage_info.tsv` provides the genomic location information for phage p22, phage Fels-1, and phage Fels-2. These data were obtained from the study by Turkington et al. (_hafeZ: active prophage identification through read mapping. bioRxiv, 2021: 2021.07.21.453177_).
 
 - run an example
 ```
