@@ -75,7 +75,7 @@ git clone https://github.com/mujiezhang/ProAct.git
 
 ## 💠 How to run
 
-- ▶️ Command line options
+- ▶️ Command line options - `python ProAct/proact_pipeline.py -h`:
 ```
 usage: proact_pipeline.py [-h] -g GENOME -1 READ1 -2 READ2 -p PHAGE_INFO [-o OUTPUT_DIR] [-t THREADS]
                           [-m] [--keep-tmp]
