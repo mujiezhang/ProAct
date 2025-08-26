@@ -29,7 +29,9 @@ Using whole-genome sequencing (WGS) data, ProAct exploits the principle that a p
 <img width="803" height="197" alt="schematic" src="https://github.com/user-attachments/assets/05ddcefd-5bdb-4298-8e27-0fe7ee55f065" />
 
 ## 💠 Workflow of ProBord
-`ProAct` 需要输入宿主参考基因组及其原始测序数据、原噬菌体起始位点，通过（1）质控过滤后的原始读段和参考基因组进行比对，生成覆盖深度数据；（2）分别计算每个marker gene区域的平均coverage，取中位值代表宿主coverage；计算原噬菌体区域的平均coverage代表噬菌体coverage；（3）计算PtoH，得到该宿主内原噬菌体的活跃度（通过PtoH表征）。
+ProAct requires the input of the host reference genome, its original sequencing data, and the start/end site of the prophage. It proceeds by (1) aligning the quality-controlled and filtered raw reads to the reference genome to generate coverage depth data; (2) calculating the average coverage for each marker gene region, taking the median value to represent the host coverage, and calculating the average coverage of the prophage region to represent the phage coverage; (3) computing PtoH to obtain the activity level of the prophage within the host (represented by PtoH).
+
+Note: We used the identify module of GTDB-Tk to identify marker genes. To avoid downloading the entire GTDB-Tk database when packaging the ProAct workflow, we employed the `extract_gtdb_mg.py` script from `https://github.com/4less/extract_gtdb_mg` with minor modifications to adapt it to ProAct's requirements. This script was adapted from GTDB-Tk, and its identification results are consistent with those of GTDB-Tk.
 
 <img width="787" height="199" alt="workflow" src="https://github.com/user-attachments/assets/6c22bc29-d1eb-40cd-ad99-8127762a3adf" />
 
@@ -143,31 +145,19 @@ test-result/
 2. `marker_gene_counts.tsv`: depth information of host marker gene
 3. `marker_genes.tsv`: identified host marker gene
 4. `phage_counts.tsv`: depth information of host marker gene
-5. `PtoH_results.tsv`: prediction result
+5. `PtoH_results.tsv`: **prediction result**
 
 A detailed overview of `PtoH_results.tsv`:
 
-| Host | Phage_Id | Contig | Start | Stop | Total_Counts | Ave_Counts | Median_of_MG | PtoH | Reads_depth_quality |
-|------|----------|--------|-------|------|--------------|------------|--------------|------|---------------------|
-| GCA_904129595.1_S.Tm_LT2p22_assembled_genomic | Sal_p22 | LR881463.1 | 1213987 | 1255756 | 149069351.0 | 3568.8137658606656 | 217.32838283828383 | 16.421296285613348 | high |
-| GCA_904129595.1_S.Tm_LT2p22_assembled_genomic | Sal_Fels-1 | LR881463.1 | 1849458 | 1892188 | 39795679.0 | 931.3069902412768 | 217.32838283828383 | 4.285252474060286 | high |
-| GCA_904129595.1_S.Tm_LT2p22_assembled_genomic | Sal_Fels-2 | LR881463.1 | 3731215 | 3764954 | 9870485.0 | 292.54549496147007 | 217.32838283828383 | 1.3460988902639377 | high |
+| Host | Phage_Id | Contig | Start | Stop | Total_Counts | Ave_Counts | Median_of_MG | PtoH | Predicted_activity | Reads_depth_quality |
+|------|----------|--------|-------|------|--------------|------------|--------------|------|---------------------|---------------------|
+| GCA_904129595.1_S.Tm_LT2p22_assembled_genomic | Sal_p22 | LR881463.1 | 1213987 | 1255756 | 149069575.0 | 3568.8191285611683 | 217.32838283828383 | 16.421320961177727 | active | high |
+| GCA_904129595.1_S.Tm_LT2p22_assembled_genomic | Sal_Fels-1 | LR881463.1 | 1849458 | 1892188 | 39795641.0 | 931.3061009571504 | 217.32838283828383 | 4.285248382168952 | active | high |
+| GCA_904129595.1_S.Tm_LT2p22_assembled_genomic | Sal_Fels-2 | LR881463.1 | 3731215 | 3764954 | 9870485.0 | 292.54549496147007 | 217.32838283828383 | 1.3460988902639377 | inactive | high |
 
-- **`sample.depth`**：参考基因组上每个位点的测序深度（chromosome, position, depth）。
-- **`sample_phage_info.txt`**：根据用户输入信息汇总（sample, genome, contig, start-end, phage_id）。
-- **`MG/`**：GTDB-Tk 标注结果目录，包含：
-  - `genome.tsv`：marker gene 注释表
-  - `gtdbtk.json`：注释参数与版本信息
-  - `gtdbtk.log` / `gtdbtk.warnings.log`：运行日志与警告
-  - `identify/…`：HMM 比对与中间文件
-- **`counts/`**：深度统计结果目录，包含：
-  - `marker_gene_counts.tsv`：宿主基因组中每个 marker gene 的信息（Gene Id, Total_Counts, Per_Counts, Median_Depth, Region_Length）
-  - `phage_counts.tsv`：每个噬菌体的信息（Phage_Id, Chromosome, Start, Stop, Total_Counts, Per_Counts, Median_Depth, Region_Length）
-  - `host_counts.tsv`：宿主基因组中所有 marker gene 平均深度的中位值（Sample_ID, Median_of_MG）
-- **`PtoH.tsv`**：最终输出，将 `phage_counts.tsv`的`Per_Counts` 除以 `host_counts.tsv`的`Median_of_MG` 得到 PtoH 值，并附加质量标签（`high`/`low`）。如果phage_Per_Counts > 10 且 host_Median_of_MG > 10，则为'high'；否则为'low'；如果PtoH ≥ 1.5，则活性判定为"active"，若PtoH < 1.5，则活性判定为"inactive".
+- **`Predicted_activity`**： If PtoH ≥ 1.5, the activity is determined as "active"; if PtoH < 1.5, the activity is determined as "inactive".
+- `Reads_depth_quality`: If Ave_Counts > 10 and Median_of_MG > 10, it is classified as 'high'; otherwise, it is classified as 'low' (indicating insufficient sequencing depth, which may lead to significant bias in PtoH).
 
-  💡 **Note 2:** 
-  如果phage_Per_Counts < 10 或 host_Median_of_MG < 10，则质量标签为'low'。表明测序深度不足，容易导致PtoH偏差较大。
 
 # 💠 Citation
 ......
