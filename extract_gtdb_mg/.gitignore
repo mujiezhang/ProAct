@@ -1,0 +1,4 @@
+# ignore all logs
+test/marker_genes_from_genes
+test/marker_genes_from_genome
+test/tmp
