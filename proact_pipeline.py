@@ -309,7 +309,7 @@ class ProActPipeline:
 
 def main():
     parser = argparse.ArgumentParser(
-        description='ProAct Pipeline - Phage activity analysis',
+        description='ProAct: Provirus Activity Detector',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
