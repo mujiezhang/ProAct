@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/ffe1315d-9e5c-48cd-a712-a3765102a4b5" alt="ProBord" width="450" />
+  <img src="https://github.com/user-attachments/assets/08cf72ac-e7b2-446c-83c1-4fcc377c0bc7" alt="ProBord" width="450" />
 </div>
 
 # ProAct: **Pro**virus **Act**ivity Detector ✨
