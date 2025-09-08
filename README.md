@@ -29,14 +29,14 @@ Assessing the activity of provirus based on the host's raw sequencing data.
 ## 💠 Principle
 Using whole-genome sequencing (WGS) data, ProAct exploits the principle that a provirus in lysogeny shares the same copy number as its host, resulting in a Provirus-to-Host coverage ratio (PtoH) of 1, whereas transition toward lysis drives self-replication and elevates PtoH above 1.
 
-<img width="803" height="197" alt="schematic" src="https://github.com/user-attachments/assets/05ddcefd-5bdb-4298-8e27-0fe7ee55f065" />
+<img width="803" height="197" alt="schematic" src="https://github.com/user-attachments/assets/7167ee6f-033e-4441-8434-2d92cb2ff9e6" />
 
 ## 💠 Workflow of ProAct
 ProAct requires the input of the host reference genome, its original sequencing data, and the start/end site of the prophage. It proceeds by (1) aligning the quality-controlled and filtered raw reads to the reference genome to generate coverage depth data; (2) calculating the average coverage for each marker gene region, taking the median value to represent the host coverage, and calculating the average coverage of the prophage region to represent the phage coverage; (3) computing PtoH to obtain the activity level of the prophage within the host (represented by PtoH).
 
 Note: We used the identify module of GTDB-Tk to identify marker genes. To avoid downloading the entire GTDB-Tk database when packaging the ProAct workflow, we employed the `extract_gtdb_mg.py` script from `https://github.com/4less/extract_gtdb_mg` with minor modifications to adapt it to ProAct's requirements. This script was adapted from GTDB-Tk, and its identification results are consistent with those of GTDB-Tk.
 
-<img width="787" height="199" alt="workflow" src="https://github.com/user-attachments/assets/6c22bc29-d1eb-40cd-ad99-8127762a3adf" />
+<img width="787" height="199" alt="workflow" src="https://github.com/user-attachments/assets/1b4d29ab-5f63-4d66-895a-98fa703f901c" />
 
 # Instructions
 
