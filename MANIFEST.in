@@ -1,4 +1,0 @@
-include README.md
-include LICENSE
-recursive-include proact/extract_gtdb_mg/hmm *.hmm *.HMM *.dat *.h3f *.h3i *.h3m *.h3p
-recursive-include proact *.py
