@@ -64,21 +64,14 @@ conda config --add channels conda-forge
 ```
 - Install dependencies
 ``` 
-conda create -n proact python bbmap bwa samtools hmmer prodigal 
+conda create -n proact proact
 conda activate probord
-pip install pandas biopython pysam
-```
-- Download ProAct from github
-```
-git clone https://github.com/mujiezhang/ProAct.git
-```
 
 ## 💠 How to run
 
-- ▶️ Command line options - `python ProAct/proact_pipeline.py -h`:
+- ▶️ Command line options - `proact -h`:
 ```
-usage: proact_pipeline.py [-h] -g GENOME -1 READ1 -2 READ2 -p PHAGE_INFO [-o OUTPUT_DIR] [-t THREADS]
-                          [-m] [--keep-tmp]
+usage: proact [-h] -g GENOME -1 READ1 -2 READ2 -p PHAGE_INFO [-o OUTPUT_DIR] [-t THREADS] [-m] [--keep-tmp] [-v]
 
 ProAct: Provirus Activity Detector
 
@@ -88,20 +81,21 @@ options:
   -1, --read1 READ1     Read1 FASTQ file
   -2, --read2 READ2     Read2 FASTQ file
   -p, --phage-info PHAGE_INFO
-                        A tab-delimited file with columns: virla_name, host_contig, start, end
+                        A tab-delimited file with columns: viral_name, host_contig, start, end
   -o, --output-dir OUTPUT_DIR
                         Output directory (default: proact_results)
   -t, --threads THREADS
                         Number of threads (default: 40)
   -m, --meta            Run prodigal in meta mode (for metagenomes)
   --keep-tmp            Keep temporary files
+  -v, --version         show program's version number and exit
 
 Examples:
   # Basic usage
-  python proact_pipeline.py -g host_genome.fna -1 sample_R1.fastq -2 sample_R2.fastq -p phage_info.tsv
+  proact -g host_genome.fna -1 sample_R1.fastq -2 sample_R2.fastq -p phage_info.tsv
 
   # Specify output dir, threads and meta mode
-  python proact_pipeline.py  -g genome.fna  -1 reads_R1.fq  -2 reads_R2.fq -p phage_regions.tsv -o results_sample1 -t 40 -m --keep-tmp
+  proact -g genome.fna -1 reads_R1.fq -2 reads_R2.fq -p phage_regions.tsv -o results_sample1 -t 40 -m --keep-tmp
 
 Outputs:
   marker_genes.tsv              - GTDB marker genes list
