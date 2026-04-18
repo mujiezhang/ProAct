@@ -126,7 +126,7 @@ test-data
 
 - run an example
 ```
-python ProAct/proact_pipeline.py -g test-data/GCA_904129595.1_S.Tm_LT2p22_assembled_genomic.fna -1 test-data/ERR4552622_R1.fastq -2 test-data/ERR4552622_R2.fastq -p test-data/phage_info.tsv -t 40 -o test-result
+proact -g test-data/GCA_904129595.1_S.Tm_LT2p22_assembled_genomic.fna -1 test-data/ERR4552622_R1.fastq -2 test-data/ERR4552622_R2.fastq -p test-data/phage_info.tsv -t 40 -o test-result
 ```
 
 ## 💠 Output files
