@@ -66,7 +66,7 @@ conda config --add channels conda-forge
 ``` 
 conda create -n proact proact
 conda activate probord
-
+```
 
 ## 💠 How to run
 
