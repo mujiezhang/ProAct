@@ -70,7 +70,7 @@ conda activate probord
 
 ## 💠 How to run
 
-- ▶️ Command line options - `proact -h`:
+- ▶️ Command line options: `proact -h`:
 ```
 usage: proact [-h] -g GENOME -1 READ1 -2 READ2 -p PHAGE_INFO [-o OUTPUT_DIR] [-t THREADS] [-m] [--keep-tmp] [-v]
 
