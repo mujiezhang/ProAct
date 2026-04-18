@@ -62,7 +62,7 @@ source ~/.bashrc
 conda config --add channels bioconda
 conda config --add channels conda-forge
 ```
-- Install dependencies
+- Install ProAct
 ``` 
 conda create -n proact proact
 conda activate probord
