@@ -158,7 +158,7 @@ A detailed overview of `PtoH_results.tsv`:
 
 
 # 💠 Citation
-......
+Mujie Zhang *et al*., Deciphering pervasive domestication and active “dark matter” of proviruses in prokaryotes via precision border mapping. *Sci. Adv*.12, eaec5299(2026). [DOI:10.1126/sciadv.aec5299](https://www.science.org/doi/10.1126/sciadv.aec5299)
 
 # 📬 Contact
 ```
